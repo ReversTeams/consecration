@@ -16,46 +16,19 @@
  */
 
 package com.illusivesoulworks.consecration.common.trigger;
-
-import com.google.gson.JsonObject;
-import com.illusivesoulworks.consecration.ConsecrationConstants;
-import com.illusivesoulworks.consecration.common.trigger.SmiteTrigger.Instance;
-import javax.annotation.Nonnull;
-import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import java.util.Optional;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
-import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-
-public class SmiteTrigger extends SimpleCriterionTrigger<Instance> {
-
-  public static final SmiteTrigger INSTANCE = new SmiteTrigger();
-  public static final ResourceLocation ID =
-      new ResourceLocation(ConsecrationConstants.MOD_ID, "smite");
-
-  @Nonnull
-  @Override
-  public ResourceLocation getId() {
-    return ID;
-  }
-
-  @Nonnull
-  @Override
-  public Instance createInstance(@Nonnull JsonObject jsonObject,
-                                 @Nonnull ContextAwarePredicate predicate,
-                                 @Nonnull DeserializationContext context) {
-    return new Instance(predicate);
-  }
-
-  public void trigger(ServerPlayer player) {
-    this.trigger(player, (instance) -> true);
-  }
-
-  public static class Instance extends AbstractCriterionTriggerInstance {
-
-    public Instance(ContextAwarePredicate predicate) {
-      super(ID, predicate);
-    }
-  }
+public class SmiteTrigger extends SimpleCriterionTrigger<SmiteTrigger.Instance> {
+ public static final SmiteTrigger INSTANCE = new SmiteTrigger();
+ @Override public Codec<Instance> codec() { return Instance.CODEC; }
+ public void trigger(ServerPlayer player) { trigger(player, instance -> true); }
+ public record Instance(Optional<ContextAwarePredicate> player) implements SimpleCriterionTrigger.SimpleInstance {
+  public static final Codec<Instance> CODEC = RecordCodecBuilder.create(i -> i.group(
+      EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player)).apply(i, Instance::new));
+ }
 }

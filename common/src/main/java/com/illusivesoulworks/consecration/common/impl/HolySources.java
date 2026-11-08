@@ -44,7 +44,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.alchemy.PotionUtils;
+
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 
@@ -77,8 +77,12 @@ public class HolySources {
     return Services.REGISTRY.isHolyTag(effect);
   }
 
-  public static boolean contains(Enchantment enchantment) {
+  public static boolean contains(net.minecraft.core.Holder<Enchantment> enchantment) {
     return Services.REGISTRY.isHolyTag(enchantment);
+  }
+
+  private static void addEffects(List<MobEffectInstance> effects, Iterable<MobEffectInstance> source) {
+    source.forEach(effects::add);
   }
 
   public static boolean contains(Entity entity) {
@@ -89,14 +93,14 @@ public class HolySources {
     List<MobEffectInstance> effects = new ArrayList<>();
 
     if (entity instanceof ThrownPotion) {
-      effects.addAll(PotionUtils.getMobEffects(((ThrownPotion) entity).getItem()));
+      addEffects(effects, ((ThrownPotion) entity).getItem().getOrDefault(net.minecraft.core.component.DataComponents.POTION_CONTENTS, net.minecraft.world.item.alchemy.PotionContents.EMPTY).getAllEffects());
     } else if (entity instanceof AreaEffectCloud cloud) {
-      effects.addAll(cloud.getPotion().getEffects());
+      addEffects(effects, ((com.illusivesoulworks.consecration.mixin.AccessorAreaEffectCloud) cloud).consecration$getPotionContents().getAllEffects());
     }
 
     for (MobEffectInstance effect : effects) {
 
-      if (contains(effect.getEffect())) {
+      if (contains(effect.getEffect().value())) {
         return true;
       }
     }
@@ -117,8 +121,8 @@ public class HolySources {
         Item item = stack.getItem();
 
         if (item instanceof ArmorItem) {
-          ArmorMaterial material = ((ArmorItem) item).getMaterial();
-          Ingredient ing = material.getRepairIngredient();
+          ArmorMaterial material = ((ArmorItem) item).getMaterial().value();
+          Ingredient ing = material.repairIngredient().get();
           // Some mods are returning null here, so we have to check for it
           if (ing != null) {
 
@@ -173,7 +177,7 @@ public class HolySources {
 
     if (HOLY_DAMAGES == null) {
       HOLY_DAMAGES = TagKey.create(Registries.DAMAGE_TYPE,
-          new ResourceLocation(ConsecrationConstants.MOD_ID, ConsecrationConstants.Registry.HOLY));
+          ResourceLocation.fromNamespaceAndPath(ConsecrationConstants.MOD_ID, ConsecrationConstants.Registry.HOLY));
     }
     return damageSource.is(HOLY_DAMAGES);
   }

@@ -1,0 +1,7 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="MIT"
+[[mods]]
+modId="port_smoke"
+version="1"
+displayName="Port Smoke Tests"

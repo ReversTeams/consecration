@@ -1,3 +1,8 @@
+# Consecration — NeoForge 1.21.1 port
+
+This branch builds for **Minecraft 1.21.1 / NeoForge / Java 21**.
+See [port status and build instructions](PORT-STATUS.md) for validation and compatibility notes.
+
 # Consecration [![](http://cf.way2muchnoise.eu/versions/consecration.svg)](https://www.curseforge.com/minecraft/mc-mods/consecration) [![](http://cf.way2muchnoise.eu/short_consecration_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/consecration/files) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg?&style=flat-square)](https://www.gnu.org/licenses/lgpl-3.0) [![](https://img.shields.io/discord/500852157503766538.svg?color=green&label=Discord&style=flat-square)](https://discord.gg/JWgrdwt)
 
 ## Overview

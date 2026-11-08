@@ -36,8 +36,8 @@ public class FireStickItem extends Item {
 
     if (!player.level().isClientSide() && !entity.getType().fireImmune()) {
       stack.hurtAndBreak(1, player,
-          damager -> damager.broadcastBreakEvent(InteractionHand.MAIN_HAND));
-      entity.setSecondsOnFire(2);
+          net.minecraft.world.entity.EquipmentSlot.MAINHAND);
+      entity.igniteForSeconds(2);
     }
     return false;
   }
@@ -49,8 +49,8 @@ public class FireStickItem extends Item {
                                                 @Nonnull InteractionHand hand) {
 
     if (!playerIn.level().isClientSide() && !target.getType().fireImmune()) {
-      stack.hurtAndBreak(1, playerIn, damager -> damager.broadcastBreakEvent(hand));
-      target.setSecondsOnFire(2);
+      stack.hurtAndBreak(1, playerIn, LivingEntity.getSlotForHand(hand));
+      target.igniteForSeconds(2);
       return InteractionResult.SUCCESS;
     }
     return super.interactLivingEntity(stack, playerIn, target, hand);

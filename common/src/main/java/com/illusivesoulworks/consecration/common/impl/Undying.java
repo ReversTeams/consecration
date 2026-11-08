@@ -41,7 +41,7 @@ import net.minecraft.world.entity.player.Player;
 public class Undying implements IUndying {
 
   private static final String SMITE_TAG = "smite";
-  private static final UUID SPEED_MOD = UUID.fromString("b812ef3d-0ef9-4368-845b-fad7003a1f4f");
+  private static final net.minecraft.resources.ResourceLocation SPEED_MOD = net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("consecration", "undying_speed");
 
   private final LivingEntity livingEntity;
 
@@ -75,8 +75,8 @@ public class Undying implements IUndying {
           if (speedMod > 0 && speedAttribute != null &&
               speedAttribute.getModifier(SPEED_MOD) == null) {
             speedAttribute.addTransientModifier(
-                new AttributeModifier(SPEED_MOD, "Undying speed", speedMod,
-                    AttributeModifier.Operation.MULTIPLY_TOTAL));
+                new AttributeModifier(SPEED_MOD, speedMod,
+                    AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
           }
         }
       }
@@ -121,7 +121,7 @@ public class Undying implements IUndying {
     if (!livingEntity.level().isClientSide()) {
       ConsecrationApi api = ConsecrationApi.getInstance();
       api.getUndying(livingEntity).ifPresent(undying -> {
-        MobEffect effect = effectInstance.getEffect();
+        MobEffect effect = effectInstance.getEffect().value();
 
         if (api.isHolyEffect(effect)) {
           int duration =
@@ -180,7 +180,7 @@ public class Undying implements IUndying {
 
   @Override
   public void readTag(CompoundTag tag) {
-    this.setVulnerableDuration(tag.getInt(SMITE_TAG));
+    this.vulnerableDuration = tag.getInt(SMITE_TAG);
   }
 
   @Override

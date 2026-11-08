@@ -1,0 +1,51 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+issueTrackerURL="https://github.com/illusivesoulworks/consecration/issues"
+logoFile= "consecration_icon.png"
+license="LGPL-3.0-or-later"
+logoBlur=false
+[[mods]]
+modId="consecration"
+version="${version}"
+displayName="Consecration"
+displayURL="https://github.com/illusivesoulworks/consecration"
+authors="C4"
+description='''
+Makes the undead more resilent except against fire and holy damage and adds new features to help you slay them
+'''
+[[dependencies.consecration]]
+    modId="neoforge"
+    type="required"
+    versionRange="[21.1,21.2)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.consecration]]
+    modId="minecraft"
+    type="required"
+    versionRange="[1.21.1,1.21.2)"
+    ordering="NONE"
+    side="BOTH"
+
+[[mixins]]
+config="consecration.mixins.json"
+
+[[dependencies.consecration]]
+modId="silentgear"
+type="optional"
+versionRange=""
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.consecration]]
+modId="vampirism"
+type="optional"
+versionRange=""
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.consecration]]
+modId="werewolves"
+type="optional"
+versionRange=""
+ordering="AFTER"
+side="BOTH"

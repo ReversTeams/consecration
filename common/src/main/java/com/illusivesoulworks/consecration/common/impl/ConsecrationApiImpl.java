@@ -80,7 +80,7 @@ public class ConsecrationApiImpl extends ConsecrationApi {
   }
 
   @Override
-  public boolean isHolyEnchantment(Enchantment enchantment) {
+  public boolean isHolyEnchantment(net.minecraft.core.Holder<Enchantment> enchantment) {
     return HolySources.contains(enchantment);
   }
 
@@ -162,7 +162,7 @@ public class ConsecrationApiImpl extends ConsecrationApi {
         return VulnerabilityType.HOLY;
       }
 
-      for (Enchantment enchantment : EnchantmentHelper.getEnchantments(stack).keySet()) {
+      for (net.minecraft.core.Holder<Enchantment> enchantment : stack.getEnchantments().keySet()) {
 
         if (api.isHolyEnchantment(enchantment)) {
           return VulnerabilityType.HOLY;

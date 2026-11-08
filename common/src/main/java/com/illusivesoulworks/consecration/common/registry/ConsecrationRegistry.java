@@ -41,8 +41,6 @@ import net.minecraft.world.level.Level;
 
 public class ConsecrationRegistry {
 
-  public static final RegistryProvider<Enchantment> ENCHANTMENTS =
-      RegistryProvider.get(Registries.ENCHANTMENT, ConsecrationConstants.MOD_ID);
   public static final RegistryProvider<Item> ITEMS =
       RegistryProvider.get(Registries.ITEM, ConsecrationConstants.MOD_ID);
   public static final RegistryProvider<MobEffect> EFFECTS =
@@ -60,32 +58,39 @@ public class ConsecrationRegistry {
   public static final RegistryObject<Item> FIRE_STICK =
       ITEMS.register(ConsecrationConstants.Registry.FIRE_STICK, FireStickItem::new);
 
-  public static final RegistryObject<Enchantment> UNDEAD_PROTECTION =
-      ENCHANTMENTS.register(ConsecrationConstants.Registry.UNDEAD_PROTECTION,
-          UndeadProtection::new);
 
   public static final RegistryObject<Potion> HOLY_POTION =
       POTIONS.register(ConsecrationConstants.Registry.HOLY,
           () -> new Potion(ConsecrationConstants.Registry.HOLY,
-              new MobEffectInstance(HOLY_EFFECT.get(), 1, 0)));
+              new MobEffectInstance(HOLY_EFFECT.asHolder(), 1, 0)));
   public static final RegistryObject<Potion> STRONG_HOLY_POTION =
       POTIONS.register(ConsecrationConstants.Registry.STRONG_HOLY,
           () -> new Potion(ConsecrationConstants.Registry.HOLY,
-              new MobEffectInstance(HOLY_EFFECT.get(), 1, 1)));
+              new MobEffectInstance(HOLY_EFFECT.asHolder(), 1, 1)));
 
   public static final RegistryObject<EntityType<FireArrowEntity>> FIRE_ARROW_TYPE =
       ENTITY_TYPES.register(ConsecrationConstants.Registry.FIRE_ARROW,
           () -> EntityType.Builder.<FireArrowEntity>of(FireArrowEntity::new, MobCategory.MISC)
-              .sized(0.5F, 0.3F).fireImmune().clientTrackingRange(64).updateInterval(5)
+              .sized(0.5F, 0.3F).clientTrackingRange(64).updateInterval(5)
               .build(ConsecrationConstants.Registry.FIRE_ARROW));
 
   private static final ResourceKey<DamageType> HOLY_DAMAGE_KEY =
       ResourceKey.create(Registries.DAMAGE_TYPE,
-          new ResourceLocation(ConsecrationConstants.MOD_ID, ConsecrationConstants.Registry.HOLY));
+          ResourceLocation.fromNamespaceAndPath(ConsecrationConstants.MOD_ID, ConsecrationConstants.Registry.HOLY));
 
   public static Holder<DamageType> getHolyDamageType(RegistryAccess registryAccess) {
     return registryAccess.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(HOLY_DAMAGE_KEY);
   }
+
+  public static final RegistryProvider<net.minecraft.advancements.CriterionTrigger<?>> TRIGGERS =
+      RegistryProvider.get(Registries.TRIGGER_TYPE, ConsecrationConstants.MOD_ID);
+  public static final RegistryObject<com.illusivesoulworks.consecration.common.trigger.SmiteTrigger> SMITE =
+      TRIGGERS.register("smite", () -> com.illusivesoulworks.consecration.common.trigger.SmiteTrigger.INSTANCE);
+  public static final RegistryProvider<net.minecraft.world.level.storage.loot.predicates.LootItemConditionType> CONDITIONS =
+      RegistryProvider.get(Registries.LOOT_CONDITION_TYPE, ConsecrationConstants.MOD_ID);
+  public static final RegistryObject<net.minecraft.world.level.storage.loot.predicates.LootItemConditionType> UNDYING_ATTACKER =
+      CONDITIONS.register("undying_attacker", () -> new net.minecraft.world.level.storage.loot.predicates.LootItemConditionType(
+          com.illusivesoulworks.consecration.common.enchantment.UndeadProtection.CODEC));
 
   public static void init() {
   }

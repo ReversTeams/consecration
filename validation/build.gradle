@@ -1,0 +1,8 @@
+plugins { id 'java-library'; id 'net.neoforged.moddev' version '2.0.148' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+neoForge {
+ version = '21.1.265'
+ runs { server { server(); programArgument '--nogui' }; client { client(); programArguments.addAll('--quickPlaySingleplayer', 'PortSmokeWorld') } }
+ mods { port_smoke { sourceSet sourceSets.main } }
+}
+dependencies { implementation files('../../demolition-order/build/libs/demolition_order-neoforge-1.0.0+1.21.1-neoforge.jar','../../weighted_armors/build/libs/weighted_armors-neoforge-1.1.1+1.21.1-neoforge.jar','../build/libs/consecration-neoforge-7.0.3+1.21.1-neoforge.jar') }

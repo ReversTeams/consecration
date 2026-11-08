@@ -16,57 +16,26 @@
  */
 
 package com.illusivesoulworks.consecration.common.enchantment;
-
 import com.illusivesoulworks.consecration.api.ConsecrationApi;
-import javax.annotation.Nonnull;
-import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
+import com.illusivesoulworks.consecration.common.registry.ConsecrationRegistry;
+import com.mojang.serialization.MapCodec;
+import java.util.Set;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import net.minecraft.world.item.enchantment.ProtectionEnchantment;
-
-public class UndeadProtection extends Enchantment {
-
-  public UndeadProtection() {
-    super(Rarity.UNCOMMON, EnchantmentCategory.ARMOR,
-        new EquipmentSlot[] {EquipmentSlot.CHEST, EquipmentSlot.FEET, EquipmentSlot.HEAD,
-            EquipmentSlot.LEGS});
-  }
-
-  public int getMinCost(int enchantmentLevel) {
-    return 8 + (enchantmentLevel - 1) * 6;
-  }
-
-  public int getMaxCost(int enchantmentLevel) {
-    return this.getMinCost(enchantmentLevel) + 6;
-  }
-
-  public int getMaxLevel() {
-    return 4;
-  }
-
-  public int getDamageProtection(int level, DamageSource source) {
-
-    if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
-      return 0;
-    }
-    Entity entity = source.getEntity();
-
-    if (entity instanceof LivingEntity livingEntity) {
-      return ConsecrationApi.getInstance().getUndying(livingEntity).map(undying -> level * 2)
-          .orElse(0);
-    }
-    return 0;
-  }
-
-  public boolean checkCompatibility(@Nonnull Enchantment enchantment) {
-
-    if (enchantment instanceof ProtectionEnchantment protectionenchantment) {
-      return protectionenchantment.type == ProtectionEnchantment.Type.FALL;
-    }
-    return super.checkCompatibility(enchantment);
-  }
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+/** Matches the original protection rule, including undead configured by other mods. */
+public record UndeadProtection() implements LootItemCondition {
+ public static final MapCodec<UndeadProtection> CODEC = MapCodec.unit(new UndeadProtection());
+ @Override public LootItemConditionType getType() { return ConsecrationRegistry.UNDYING_ATTACKER.get(); }
+ @Override public Set<LootContextParam<?>> getReferencedContextParams() { return Set.of(LootContextParams.DAMAGE_SOURCE); }
+ @Override public boolean test(LootContext context) {
+  var source = context.getParamOrNull(LootContextParams.DAMAGE_SOURCE);
+  return source != null && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)
+      && source.getEntity() instanceof LivingEntity attacker
+      && ConsecrationApi.getInstance().getUndying(attacker).isPresent();
+ }
 }

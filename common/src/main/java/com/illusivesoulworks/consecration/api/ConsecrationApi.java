@@ -48,7 +48,7 @@ public abstract class ConsecrationApi {
 
   public abstract boolean isHolyItem(ItemStack stack);
 
-  public abstract boolean isHolyEnchantment(Enchantment enchantment);
+  public abstract boolean isHolyEnchantment(net.minecraft.core.Holder<Enchantment> enchantment);
 
   public abstract boolean isHolyEffect(MobEffect mobEffect);
 

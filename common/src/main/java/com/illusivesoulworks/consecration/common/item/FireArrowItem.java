@@ -32,10 +32,17 @@ public class FireArrowItem extends ArrowItem {
     super(new Item.Properties());
   }
 
+  @Override
+  public net.minecraft.world.entity.projectile.Projectile asProjectile(Level level, net.minecraft.core.Position pos, ItemStack stack, net.minecraft.core.Direction direction) {
+    var arrow = new FireArrowEntity(level, pos.x(), pos.y(), pos.z());
+    arrow.pickup = AbstractArrow.Pickup.ALLOWED;
+    return arrow;
+  }
+
   @Nonnull
   @Override
   public AbstractArrow createArrow(@Nonnull Level worldIn, @Nonnull ItemStack stack,
-                                   @Nonnull LivingEntity shooter) {
-    return new FireArrowEntity(worldIn, shooter);
+                                   @Nonnull LivingEntity shooter, @javax.annotation.Nullable ItemStack weapon) {
+    return new FireArrowEntity(worldIn, shooter, stack, weapon);
   }
 }

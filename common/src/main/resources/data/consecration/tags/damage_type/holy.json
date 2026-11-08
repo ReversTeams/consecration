@@ -1,4 +1,6 @@
 {
   "replace": false,
-  "values": ["consecration:holy"]
+  "values": [
+    "consecration:holy"
+  ]
 }

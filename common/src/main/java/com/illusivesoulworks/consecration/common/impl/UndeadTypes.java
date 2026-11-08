@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
+
 
 public class UndeadTypes {
 
@@ -56,12 +56,12 @@ public class UndeadTypes {
 
   private static boolean isValidCreature(final LivingEntity livingEntity) {
     return (ConsecrationConfig.CONFIG.giveDefaultUndeadUndying.get() &&
-        livingEntity.getMobType() == MobType.UNDEAD) || getType(livingEntity) != UndeadType.NOT;
+        livingEntity.getType().is(net.minecraft.tags.EntityTypeTags.UNDEAD)) || getType(livingEntity) != UndeadType.NOT;
   }
 
   private static boolean isValidDimension(final ResourceLocation resourceLocation) {
     Set<ResourceLocation> dimensions =
-        ConsecrationConfig.CONFIG.dimensionsList.get().stream().map(ResourceLocation::new)
+        ConsecrationConfig.CONFIG.dimensionsList.get().stream().map(ResourceLocation::parse)
             .collect(Collectors.toSet());
     ConsecrationConfig.ListType listType = ConsecrationConfig.CONFIG.dimensionsListType.get();
 

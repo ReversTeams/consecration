@@ -19,9 +19,7 @@ package com.illusivesoulworks.consecration.common.config;
 
 import com.illusivesoulworks.consecration.ConsecrationConstants;
 import com.illusivesoulworks.consecration.common.impl.HolySources;
-import com.illusivesoulworks.spectrelib.config.SpectreConfig;
-import com.illusivesoulworks.spectrelib.config.SpectreConfigLoader;
-import com.illusivesoulworks.spectrelib.config.SpectreConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,12 +27,12 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class ConsecrationConfig {
 
-  public static final SpectreConfigSpec CONFIG_SPEC;
+  public static final ModConfigSpec CONFIG_SPEC;
   public static final Config CONFIG;
   private static final String CONFIG_PREFIX = "gui." + ConsecrationConstants.MOD_ID + ".config.";
 
   static {
-    final Pair<Config, SpectreConfigSpec> specPair = new SpectreConfigSpec.Builder()
+    final Pair<Config, ModConfigSpec> specPair = new ModConfigSpec.Builder()
         .configure(Config::new);
     CONFIG_SPEC = specPair.getRight();
     CONFIG = specPair.getLeft();
@@ -45,27 +43,26 @@ public class ConsecrationConfig {
   }
 
   public static void setup() {
-    SpectreConfig config = SpectreConfigLoader.add(SpectreConfig.Type.SERVER, CONFIG_SPEC,
-        ConsecrationConstants.MOD_ID);
-    config.addLoadListener((cfg, flag) -> HolySources.reloadConfigs());
+    net.neoforged.fml.ModList.get().getModContainerById(ConsecrationConstants.MOD_ID).orElseThrow()
+        .registerConfig(net.neoforged.fml.config.ModConfig.Type.SERVER, CONFIG_SPEC);
   }
 
   public static class Config {
 
-    public final SpectreConfigSpec.ConfigValue<List<? extends String>> dimensionsList;
-    public final SpectreConfigSpec.EnumValue<ListType> dimensionsListType;
+    public final ModConfigSpec.ConfigValue<List<? extends String>> dimensionsList;
+    public final ModConfigSpec.EnumValue<ListType> dimensionsListType;
 
-    public final SpectreConfigSpec.IntValue fireVulnerableDuration;
-    public final SpectreConfigSpec.IntValue holyVulnerableDuration;
-    public final SpectreConfigSpec.ConfigValue<List<? extends String>> holyMaterials;
+    public final ModConfigSpec.IntValue fireVulnerableDuration;
+    public final ModConfigSpec.IntValue holyVulnerableDuration;
+    public final ModConfigSpec.ConfigValue<List<? extends String>> holyMaterials;
 
-    public final SpectreConfigSpec.BooleanValue giveDefaultUndeadUndying;
-    public final SpectreConfigSpec.IntValue damageReduction;
-    public final SpectreConfigSpec.IntValue healthRegeneration;
-    public final SpectreConfigSpec.IntValue speedModifier;
-    public final SpectreConfigSpec.IntValue damageReductionVsMobs;
+    public final ModConfigSpec.BooleanValue giveDefaultUndeadUndying;
+    public final ModConfigSpec.IntValue damageReduction;
+    public final ModConfigSpec.IntValue healthRegeneration;
+    public final ModConfigSpec.IntValue speedModifier;
+    public final ModConfigSpec.IntValue damageReductionVsMobs;
 
-    public Config(SpectreConfigSpec.Builder builder) {
+    public Config(ModConfigSpec.Builder builder) {
       builder.push("dimension");
 
       dimensionsList = builder

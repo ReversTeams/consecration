@@ -15,7 +15,7 @@
     }
   },
   "result": {
-    "item": "consecration:fire_arrow",
-    "count": 4
+    "count": 4,
+    "id": "consecration:fire_arrow"
   }
 }

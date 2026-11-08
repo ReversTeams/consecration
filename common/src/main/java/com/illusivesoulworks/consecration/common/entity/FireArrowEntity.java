@@ -20,34 +20,34 @@ package com.illusivesoulworks.consecration.common.entity;
 import javax.annotation.Nonnull;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import com.illusivesoulworks.consecration.common.registry.ConsecrationRegistry;
 
-public class FireArrowEntity extends Arrow {
+public class FireArrowEntity extends AbstractArrow {
 
-  public FireArrowEntity(EntityType<? extends Arrow> type, Level world) {
+  public FireArrowEntity(EntityType<? extends AbstractArrow> type, Level world) {
     super(type, world);
   }
 
   public FireArrowEntity(Level worldIn, double x, double y, double z) {
-    super(worldIn, x, y, z);
+    super(ConsecrationRegistry.FIRE_ARROW_TYPE.get(), x, y, z, worldIn, new ItemStack(ConsecrationRegistry.FIRE_ARROW.get()), null);
   }
 
-  public FireArrowEntity(Level worldIn, LivingEntity shooter) {
-    super(worldIn, shooter);
+  public FireArrowEntity(Level worldIn, LivingEntity shooter, ItemStack stack, ItemStack weapon) {
+    super(ConsecrationRegistry.FIRE_ARROW_TYPE.get(), shooter, worldIn, stack.copyWithCount(1), weapon);
   }
 
   @Override
   public void tick() {
     super.tick();
-    this.setSecondsOnFire(100);
+    this.igniteForSeconds(100);
   }
 
   @Override
   @Nonnull
-  protected ItemStack getPickupItem() {
+  protected ItemStack getDefaultPickupItem() {
     return new ItemStack(ConsecrationRegistry.FIRE_ARROW.get());
   }
 }

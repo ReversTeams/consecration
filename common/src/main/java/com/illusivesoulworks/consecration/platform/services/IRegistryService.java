@@ -47,7 +47,7 @@ public interface IRegistryService {
 
   boolean isHolyTag(MobEffect mobEffect);
 
-  boolean isHolyTag(Enchantment enchantment);
+  boolean isHolyTag(net.minecraft.core.Holder<Enchantment> enchantment);
 
   boolean canSmite(ItemStack stack);
 }
