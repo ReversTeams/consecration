@@ -11,7 +11,7 @@ displayName="Consecration"
 displayURL="https://github.com/illusivesoulworks/consecration"
 authors="C4"
 description='''
-Makes the undead more resilent except against fire and holy damage and adds new features to help you slay them
+1.21.1 Fork by ReversTeam. Makes the undead more resilent except against fire and holy damage and adds new features to help you slay them
 '''
 [[dependencies.consecration]]
     modId="neoforge"

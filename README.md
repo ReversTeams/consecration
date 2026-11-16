@@ -40,4 +40,8 @@ Unless you can somehow make the undead drink this potion yourself, you're also g
 Armor enchantment that reduces damage from undead attacks. Works like Protection enchantments, including not being able to stack with them except for Feather Falling.
 
 ## Credits
+[Original Mod](https://www.curseforge.com/minecraft/mc-mods/consecration)
+
+TheIllusiveC4 - Original mod author
+
 Khioni - Fire Arrow and Fire Stick textures
